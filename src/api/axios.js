@@ -1,7 +1,7 @@
 import axios from "axios";
 
- const apiUrl = "https://event.unephmart.com/api/"
-// const apiUrl = "http://127.0.0.1:8000/api/"
+//  const apiUrl = "https://event.unephmart.com/api/"
+ const apiUrl = "http://127.0.0.1:8000/api/"
 
 
 // Create an Axios instance with the base URL from .env

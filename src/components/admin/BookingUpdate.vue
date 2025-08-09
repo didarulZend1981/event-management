@@ -67,7 +67,12 @@ if (bookingId) {
 const updateBooking = ()=>{
     const bookingId = route.params.bookingId
     api.put(`/booking/update/${bookingId}`, booking.value).then((response)=>{
-        toast.success(response.message)
+        // toast.success(response.message)
+
+
+          toast.success(response.data.message, {
+          position: 'top-right',
+          });
     })
 
     setTimeout(()=>{

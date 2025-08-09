@@ -41,6 +41,4 @@
 
   </template>
 
-  <script setup>
 
-  </script>

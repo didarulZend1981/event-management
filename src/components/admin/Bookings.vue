@@ -6,40 +6,37 @@
                   <div class="card-header">member Bookings</div>
                   <div class="card-body">
 
-                      <table class="table" v-if="bookings">
-                          <thead>
-                              <tr>
-                                  <th scope="col">#</th>
-                                  <th scope="col">Event Title</th>
-                                  <th scope="col">Start Date</th>
-                                  <th scope="col">End Date</th>
-                                  <th scope="col">Member Name</th>
-                                  <th scope="col">Ticket Price</th>
-                                  <th scope="col">Ticket QTY</th>
-                                  <th scope="col">Total</th>
-                                  <th scope="col">Status</th>
-                                  <th scope="col">Action</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr v-for="(booking, index) in bookings" :key="booking.id">
-                                  <th scope="row">{{ index + 1 }}</th>
-                                  <td>{{ booking.event.title }}</td>
-                                  <td>{{ booking.event.start_time }}</td>
-                                  <td>{{ booking.event.end_time }}</td>
-                                  <td>{{ booking.user.name }}</td>
-                                  <td>{{ booking.event.ticket_price }}</td>
-                                  <td>{{ booking.ticket_qty }}</td>
-                                  <td>{{ booking.total_price }}</td>
-                                  <td>{{ booking.status }}</td>
-                                  <td>
-                                        <router-link :to="`/admin-dashboard/booking/update/${booking.id}`">
-                                            Edit
-                                        </router-link>
-                                    </td>
-                              </tr>
-                          </tbody>
-                      </table>
+
+
+
+
+
+
+
+
+
+                      <input
+                      type="text"
+                      v-model="search"
+                      placeholder="Search events..."
+                      class="form-control mb-3"
+                    />
+
+
+                      <EasyDataTable
+              :headers="headers"
+              :items="bookings"
+              :rows-per-page="5"
+              :search-value="search"
+              table-class-name="table table-striped"
+              header-text-direction="center"
+            >
+
+
+            <template #item-action="{ id }">
+                <router-link :to="`/admin-dashboard/booking/update/${id}`">Edit</router-link>
+              </template>
+            </EasyDataTable>
 
                   </div>
               </div>
@@ -53,9 +50,38 @@
 import api from '@/api/axios';
 import { onMounted, ref } from 'vue';
 
+import EasyDataTable from 'vue3-easy-data-table';
+import 'vue3-easy-data-table/dist/style.css';
+
 
 const bookings = ref([])
 const loggeduser = ref([])
+const search = ref('');
+
+
+const headers = [
+  { text: '#', value: 'index' },
+  { text: 'Title', value: 'event.title' },
+  { text: 'start_time', value: 'event.start_time' },
+  { text: 'end_time', value: 'event.end_time' },
+  { text: 'Name', value: 'user.name' },
+  { text: 'price', value: 'event.ticket_price' },
+  { text: 'QTy', value: 'ticket_qty' },
+  { text: 'Total price', value: 'total_price' },
+  { text: 'status', value: 'status' },
+  { text: 'Action', value: 'action' },
+
+];
+
+
+
+
+
+
+
+
+
+
 
 
 onMounted(async () => {
@@ -65,8 +91,18 @@ onMounted(async () => {
 
   try {
       const response = await api.get(`bookings`);
+      // if (response.status) {
+      //     bookings.value = response.data.data;
+      // }
+
+
       if (response.status) {
-          bookings.value = response.data.data;
+
+          bookings.value = response.data.data.map((item, i) => ({
+          ...item,
+          index: i + 1
+
+          }));
       }
 
   } catch (error) {

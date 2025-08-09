@@ -1,16 +1,28 @@
 <template>
   <div class="container mt-5">
   <div class="row justify-content-center">
-    <div class="col-md-12">
+    <div class="col-md-12 marginTop">
       <div class="card">
-        <div class="card-header">Registration Check test</div>
+        <div class="card-header">
+          <BlockTitle :customStyle="{  fontSize: '50px',textTransform:'uppercase' }" customClass="textCenter">Booking Information</BlockTitle>
+
+        </div>
         <div class="card-body">
 
           <div class="row">
               <div class="col-md-4">
-                  user information
+                <Card>
+                  <template #header>
+    <div class="d-flex justify-between items-center">
+      <h2 class="text-lg font-bold">
 
-                  <ul v-if="loggeduser">
+
+        <BlockTitle :customStyle="{  fontSize: '30px',textShadow:'2px 3px 2px',marginBottom:'10px',textTransform: 'uppercase' }"> user information</BlockTitle>
+      </h2>
+    </div>
+  </template>
+
+  <ul v-if="loggeduser">
                       <li>Name: {{ loggeduser.name }}</li>
                       <li>Email: {{ loggeduser.email }}</li>
                       <li>Profile Image:
@@ -18,31 +30,121 @@
                           v-if="loggeduser && loggeduser.profile_image"
                           :src="`${apiUrl}${loggeduser.profile_image}`"
                           alt=""
-                          class="img-fluid"/>
+                          class="img-fluid"
+                          style="max-width: 200px; height: auto;"
+                          />
                       </li>
                   </ul>
 
+                </Card>
+
+
+
+
               </div>
               <div class="col-md-4">
-                <ul v-if="event">
-                        <li>Name: {{ event.title }}</li>
-                        <li>Price: {{ event.ticket_price }}</li>
-                        <li>Start: {{ event.start_time }}</li>
-                        <li>End: {{ event.end_time }}</li>
-                    </ul>
+
+                  <Card >
+                    <template #header>
+    <div class="d-flex justify-between items-center">
+      <h2 class="text-lg font-bold">
+
+
+        <BlockTitle :customStyle="{  fontSize: '30px',textShadow:'2px 3px 2px',marginBottom:'10px',textTransform: 'uppercase' }">Event History</BlockTitle>
+      </h2>
+    </div>
+  </template>
+                      <ul v-if="event" style="padding-left: 0px;">
+
+                        <li><CommonLabel>Name: {{ event.title }}</CommonLabel></li>
+
+                        <img class="" loading="lazy" :src="`${eventUrl}storage/${event.event_image}`" alt="Business"
+
+
+
+                        style="max-width: 300px; height: auto;border-radius: 5px; border: solid 1px white;"
+                        />
+
+
+
+                        <li><CommonLabel>Price: {{ event.ticket_price }}</CommonLabel></li>
+                        <p class="justify-text"  v-html="event.descriptions">
+                        </p>
+                        <li><CommonLabel style="margin-top: 0px;margin-bottom: 0px;">Start: <FormatDateTimeVue :datetime="event.start_time"/></CommonLabel></li>
+
+                        <li><CommonLabel style="margin-top: 0px;margin-bottom: 0px;">End: <FormatDateTimeVue :datetime="event.end_time"/></CommonLabel></li>
+                        <li><CommonLabel style="margin-top: 0px;margin-bottom: 0px;">Duration: <EventDuration :start="event.start_time" :end="event.end_time"></EventDuration></CommonLabel></li>
+                      </ul>
+
+
+    </Card>
+
+
+
+
+
               </div>
               <div class="col-md-4">
+                <Card >
+                  <template #header>
+    <div class="d-flex justify-between items-center">
+      <h2 class="text-lg font-bold">
+
+
+        <BlockTitle :customStyle="{  fontSize: '30px',textShadow:'2px 3px 2px',marginBottom:'10px',textTransform: 'uppercase' }">Booking Price</BlockTitle>
+      </h2>
+    </div>
+  </template>
                 <form v-if="event" @submit.prevent="confirmbooking">
-                            <div class="mb-3">
-                                <label for="ticket_qty" class="form-label">Ticket Quantity</label>
-                                <input v-model="ticket_qty" type="number" class="form-control" min="1" required>
+                            <div class="">
+
+                                <CommonLabel :customStyle="{ marginTop:'40px' }" htmlFor="ticket_qty"
+>Ticket Quantity <span class="text-danger">*</span></CommonLabel>
+
+                                <CommonInput
+                                v-model="ticket_qty"
+                                type="number"
+                                id="ticket_qty"
+                                name="ticket_qty"
+                                min="1"
+                                required
+                                :isInvalid="ticket_qty <= 0"
+
+
+                                >
+
+
+                                </CommonInput>
                             </div>
                             <div class="mb-3">
-                                <label for="total_amount" class="form-label">Total Amount</label>
-                                <input :value="total_amount" type="text" class="form-control" disabled>
+                              <CommonLabel htmlFor="ticket_qty">Total Amount</CommonLabel>
+
+
+                                <CommonInput
+                                v-model="total_amount"
+                                type="number"
+                                id="total_amount"
+                                name="total_amount"
+                                min="1"
+                                disabled
+
+
+
+                                />
+
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+
+                            <Button
+                                                  label="Booking"
+                          :customClass="'marginTop'"
+                          :customStyle="{ fontSize: '20px',textAlign:'center' ,backgroundColor: 'red'}"
+
+
+                                                  ></Button>
                         </form>
+
+
+                      </Card>
               </div>
           </div>
 
@@ -58,6 +160,13 @@ import { useRouter, useRoute } from 'vue-router';
 import api from '@/api/axios';
 import { useToast } from 'vue-toast-notification';
 import { computed, onMounted, ref } from 'vue';
+import BlockTitle from '@/components/BlockTitle.vue';
+import Button from '@/components/Button.vue';
+import CommonLabel from '@/components/CommonLabel.vue';
+import CommonInput from '@/components/CommonInput.vue';
+import Card from '@/components/Card.vue';
+import FormatDateTimeVue  from '../components/FormatDateTime.vue';
+import EventDuration from '@/components/EventDuration.vue';
 
 
 const loggeduser = ref(null)
@@ -69,6 +178,7 @@ const router = useRouter()
 const toast = useToast()
 
 const apiUrl = 'https://event.unephmart.com/'
+const eventUrl = 'http://localhost:8000/';
 
 onMounted(()=>{
 
@@ -116,9 +226,15 @@ const confirmbooking = () => {
             position:'top-right'
         })
 
+
+
+
         setTimeout(()=>{
-            router.push('member-event-bookings')
-        }, 200)
+          router.push('/admin-dashboard/member-event-bookings').then(() => {
+            return window.location.reload();
+          })
+        }, 2000)
+
 
 
   }).catch(error => {
@@ -130,3 +246,17 @@ const confirmbooking = () => {
 
 
 </script>
+
+<style>
+.marginTop{
+  margin-top: 200px;
+  margin-bottom: 100px;
+  text-align: center;
+}
+.marginTopC{
+  margin-top: 30px;
+  margin-bottom: 20px;
+  border: 1px solid red;
+}
+
+</style>

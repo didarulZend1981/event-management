@@ -7,40 +7,35 @@
                   </router-link></div>
                   <div class="card-body">
 
-                      <table class="table" v-if="events">
-                          <thead>
-                              <tr>
-                                  <th scope="col">#</th>
-                                  <th scope="col">Title</th>
-                                  <th scope="col">descriptions</th>
-                                  <th scope="col">Start Date</th>
-                                  <th scope="col">End Date</th>
-                                  <th scope="col">Ticket Price</th>
-                                  <th scope="col">Action</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr v-for="(event, index) in events" :key="event.id">
-                                  <th scope="row">{{ index + 1 }}</th>
-                                  <td>{{ event.title }}</td>
-                                  <td v-html="event.descriptions"></td>
-                                  <td>{{ event.start_time }}</td>
-                                  <td>{{ event.end_time }}</td>
-                                  <td>{{ event.ticket_price }}</td>
-                                  <td>
-
-                                    <router-link :to="`/admin-dashboard/event/edit/${event.id}`">
-                                            Edit
-                                    </router-link>
+                      <input
+                      type="text"
+                      v-model="search"
+                      placeholder="Search events..."
+                      class="form-control mb-3"
+                    />
 
 
-                                  </td>
+                      <EasyDataTable
+              :headers="headers"
+              :items="events"
+              :rows-per-page="5"
+              :search-value="search"
+              table-class-name="table table-striped"
+              header-text-direction="center"
+            >
 
-                              </tr>
-                          </tbody>
-                      </table>
 
-                  </div>
+
+              <template #item-action="{ id }">
+                <router-link :to="`/admin-dashboard/event/edit/${id}`">Edit</router-link>
+                <button class="btn btn-danger btn-sm" @click="DeleteClick(id)">Del</button>
+              </template>
+            </EasyDataTable>
+
+
+
+
+                    </div>
               </div>
           </div>
       </div>
@@ -52,23 +47,77 @@
 import api from '@/api/axios';
 import { onMounted, ref } from 'vue';
 import { useToast } from 'vue-toast-notification';
-import { useRouter } from 'vue-router';
+// import router from '@/routes';
+
+
+import EasyDataTable from 'vue3-easy-data-table';
+import 'vue3-easy-data-table/dist/style.css';
 
 const events = ref([])
 const toast = useToast()
 
-const router = useRouter()
+
+const search = ref('');
+
+const headers = [
+  { text: '#', value: 'index' },
+  { text: 'Title', value: 'title' },
+  { text: 'Descriptions', value: 'descriptions' },
+  { text: 'Start Date', value: 'start_time' },
+  { text: 'End Date', value: 'end_time' },
+  { text: 'Ticket Price', value: 'ticket_price' },
+  { text: 'Action', value: 'action' }
+];
+
+
+
+
+
+
+
+
+
+
+
 
 onMounted(async () => {
   try {
-      const response = await api.get('/events');
-      if (response.status) {
-          events.value = response.data.data;
-      }
-
+    const response = await api.get('/events');
+    if (response.status) {
+      // Add index to each item
+      events.value = response.data.data.map((item, i) => ({
+        ...item,
+        index: i + 1
+      }));
+    }
   } catch (error) {
-      console.log(error);
+    console.log(error);
+    toast.error('Failed to load events');
   }
 });
 
+
+const DeleteClick = async (id) => {
+  const confirmDelete = confirm("Do you want to delete?");
+  if (confirmDelete) {
+    try {
+      const response = await api.delete(`/event-delete/${id}`);
+      toast.success(response.data.message || 'Deleted successfully');
+       events.value = events.value.filter(event => event.id !== id);
+
+    } catch (error) {
+      toast.error('Delete failed');
+      console.error(error);
+    }
+  } else {
+    toast.info('Delete canceled');
+  }
+};
+
 </script>
+
+
+
+
+
+
