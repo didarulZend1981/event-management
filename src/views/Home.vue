@@ -16,7 +16,7 @@
 					<p class="sub-text text-center">Check out the event details</p>
 				</div>
         <ul class="timeline">
-        <li v-for="(event, index) in paginatedEvents" :key="event.id" :class="{'timeline-inverted': index % 2 !== 0}">
+        <li v-for="(event, index) in visibleEvents" :key="event.id" :class="{'timeline-inverted': index % 2 !== 0}">
           <div class="timeline-badge">
             <a><i class="fa fa-circle" id=""></i></a>
           </div>
@@ -76,7 +76,7 @@
 
 				</section>
 
-        <section class="text-center">
+        <!-- <section class="text-center">
           <div class="d-flex justify-content-center mt-4">
             <button
       :style="{ backgroundColor: 'rgb(78, 221, 232)', borderColor: 'rgb(78, 221, 232)', color: '#fff' }"
@@ -97,10 +97,39 @@
     </button>
 
     </div>
-        </section>
+        </section> -->
+
+
+
+        <!-- <button
+      v-if="currentIndex < events.length"
+      @click="loadMore"
+      class="btn btn-success px-5"
+    >
+      Load More
+    </button>
+
+    <p v-else class="text-gray-500">All events loaded</p> -->
+
+
+
+   <CustomButton
+      label="Load More"
+       sizeClass="medium"
+      customClass="contactButton"
+      :show="currentIndex < events.length && !loading"
+      @click="loadMore"
+    />
+
+    <p v-if="loading" class="text-blue-500 mt-2">Loading...</p>
+    <p v-else-if="currentIndex >= events.length" class="text-gray-500 mt-2">All events loaded</p>
 
 
 				<!--===============================-->
+
+
+
+
 
 
     </div>
@@ -118,6 +147,7 @@ import { onMounted, ref, computed } from 'vue';
 import { useToast } from 'vue-toast-notification';
 import { useRouter } from 'vue-router';
 import HeroSection from '@/components/frontend/HeroSection.vue';
+import CustomButton from '@/components/CustomButton.vue';
 // import Button from '@/components/Button.vue';
 
 const apiUrl = 'https://event-api.appwebd.com/';
@@ -125,9 +155,17 @@ const apiUrl = 'https://event-api.appwebd.com/';
 const toast = useToast();
 const router = useRouter();
 
+
 const events = ref([]);
-const currentPage = ref(1);
-const eventsPerPage = 6;
+const visibleEvents = ref([]);
+const currentIndex = ref(0);
+const perPage = 4;
+const loading = ref(false);
+
+
+
+
+
 
 function getTruncatedHtml(html, limit = 10) {
   const div = document.createElement('div')
@@ -163,15 +201,41 @@ function getTruncatedHtml(html, limit = 10) {
   return result.trim() + (wordCount >= limit ? '...' : '')
 }
 
-onMounted(async () => {
+
+
+
+
+
+// API থেকে ডেটা লোড করা
+const loadAllEvents = async () => {
   try {
-    const response = await api.get('/events');
-    if (response.status) {
-      events.value = response.data.data;
+    loading.value = true;
+    const res = await api.get("/events");
+    if (res.status === 200) {
+      events.value = res.data.data;
+      loadMore(); // প্রথম ৬টা দেখাবে
     }
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
+  } finally {
+    loading.value = false;
   }
+};
+
+// Load More
+const loadMore = async () => {
+  loading.value = true; // লোডিং শুরু
+  await new Promise((resolve) => setTimeout(resolve, 500)); // simulate API delay
+
+  const nextIndex = currentIndex.value + perPage;
+  visibleEvents.value.push(...events.value.slice(currentIndex.value, nextIndex));
+  currentIndex.value = nextIndex;
+
+  loading.value = false; // লোডিং শেষ
+};
+
+onMounted(() => {
+  loadAllEvents();
 });
 
 
@@ -222,21 +286,7 @@ const handleBooking = (event) => {
   }
 };
 
-// Computed for paginated events
-const paginatedEvents = computed(() => {
-  const start = (currentPage.value - 1) * eventsPerPage;
-  const end = start + eventsPerPage;
-  return events.value.slice(start, end);
-});
 
-// Total pages
-const totalPages = computed(() => Math.ceil(events.value.length / eventsPerPage));
-
-const changePage = (page) => {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page;
-  }
-};
 
 </script>
 
