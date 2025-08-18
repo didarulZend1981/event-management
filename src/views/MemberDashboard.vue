@@ -42,8 +42,10 @@
     const loggeduser = ref(null)
     const toast = useToast()
 
-    const apiUrl = 'http://localhost:8000/'
-    // const apiUrl = 'https://event.unephmart.com/'
+    // const apiUrl = 'http://localhost:8000/'
+
+
+     const apiUrl = 'https://event-api.appwebd.com/'
     onMounted(async () => {
         const user = localStorage.getItem('user')
         loggeduser.value = JSON.parse(user)

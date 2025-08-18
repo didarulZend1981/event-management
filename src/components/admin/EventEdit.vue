@@ -112,7 +112,7 @@
 
                   <div v-if="event.event_image_preview || event.event_image" class="mt-2">
                   <img
-                    :src="event.event_image_preview ? event.event_image_preview : `${apiUrl}storage/${event.event_image}`"
+                    :src="event.event_image_preview ? event.event_image_preview : `${apiUrl}public/storage/${event.event_image}`"
                     alt="Preview"
                     class="img-fluid rounded border"
                     style="max-height: 150px;"
@@ -191,7 +191,8 @@ const selectedImage = ref(null)
 const route = useRoute()
 const toast = useToast()
 // const apiUrl = 'https://event.unephmart.com/'
-const apiUrl = 'http://localhost:8000/';
+const apiUrl = 'https://event-api.appwebd.com/';
+// const apiUrl = 'http://localhost:8000/';
 
 
 onMounted(() => {

@@ -28,7 +28,7 @@
                       <li>Profile Image:
                           <img
                           v-if="loggeduser && loggeduser.profile_image"
-                          :src="`${apiUrl}${loggeduser.profile_image}`"
+                          :src="`${eventUrl}storage/${loggeduser.profile_image}`"
                           alt=""
                           class="img-fluid"
                           style="max-width: 200px; height: auto;"
@@ -58,7 +58,7 @@
 
                         <li><CommonLabel>Name: {{ event.title }}</CommonLabel></li>
 
-                        <img class="" loading="lazy" :src="`${eventUrl}storage/${event.event_image}`" alt="Business"
+                        <img class="" loading="lazy" :src="`${eventUrl}public/storage/${event.event_image}`" alt="Business"
 
 
 
@@ -177,8 +177,9 @@ const route = useRoute()
 const router = useRouter()
 const toast = useToast()
 
-const apiUrl = 'https://event.unephmart.com/'
-const eventUrl = 'http://localhost:8000/';
+// const apiUrl = 'https://event.unephmart.com/'
+// const eventUrl = 'http://localhost:8000/';
+const eventUrl = 'https://event-api.appwebd.com/'
 
 onMounted(()=>{
 

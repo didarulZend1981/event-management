@@ -6,22 +6,25 @@
       <li>Profile Image:
           <img
           v-if="loggeduser && loggeduser.profile_image"
-          :src="`${apiUrl}${loggeduser.profile_image}`"
+          :src="`${apiUrl}/pulic/${loggeduser.profile_image}`"
           alt=""/>
       </li>
   </ul>
   <DynamicList
-    api-url="http://localhost:8000/api/events" title="Event"
+    api-url="https://event-api.appwebd.com/api/events" title="Event"
+
+
+  />
+
+
+  <!-- http://localhost:8000/api/events -->
+  <DynamicList
+    api-url="https://event-api.appwebd.com/api/users" title="User"
 
   />
 
   <DynamicList
-    api-url="http://localhost:8000/api/users" title="User"
-
-  />
-
-  <DynamicList
-    api-url="http://localhost:8000/api/bookings" title="bookings"
+    api-url="https://event-api.appwebd.com/api/bookings" title="bookings"
 
   />
   </template>
@@ -33,7 +36,8 @@ import DynamicList from '../DynamicList.vue';
 
           const loggeduser = ref(null)
           //  const apiUrl = 'https://event.unephmart.com/'
-          const apiUrl = 'http://localhost:5173/'
+          // const apiUrl = 'http://localhost:5173/'
+           const apiUrl = 'https://event-api.appwebd.com/api/'
           onMounted(async () => {
               // const test = 'users';
               // const events = await api.get(`/${test}`);
@@ -43,3 +47,7 @@ import DynamicList from '../DynamicList.vue';
           });
 
       </script>
+
+
+
+

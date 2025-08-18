@@ -27,7 +27,7 @@
             </div>
             <!-- <img class="blog-image" loading="lazy" :src="`${apiUrl}${event.event_image}`" alt="Business" width="100%" height="250" /> -->
 
-            <img class="blog-image" loading="lazy" :src="`${apiUrl}storage/${event.event_image}`" alt="Business" width="100%" height="250" />
+            <img class="blog-image" loading="lazy" :src="`${apiUrl}public/storage/${event.event_image}`" alt="Business" width="100%" height="250" />
 
 
             <div class="timeline-body">
@@ -40,7 +40,7 @@
 
               <p class="timeline-other col-md-6">
                 <em class="timeline-item">
-                  Venue : Adelaide
+                  Venue : {{ event.venue_name	 }}
                 </em>
 
 
@@ -120,7 +120,8 @@ import { useRouter } from 'vue-router';
 import HeroSection from '@/components/frontend/HeroSection.vue';
 // import Button from '@/components/Button.vue';
 
-const apiUrl = 'http://localhost:8000/';
+const apiUrl = 'https://event-api.appwebd.com/';
+// const apiUrl = 'http://localhost:8000/';
 const toast = useToast();
 const router = useRouter();
 

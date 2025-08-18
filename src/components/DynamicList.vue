@@ -2,13 +2,26 @@
   <div>
     <h2>{{ title }}</h2>
     <p v-if="loading">Loading...</p>
-    <ul v-else>
-      <!-- <li v-for="(item, index) in items" :key="index">
-  {{ item.length }}
-</li> -->
-      {{ items.length }}
+    <!-- <ul v-else>
 
-    </ul>
+      {{ items.data.length }}
+        {{ items.length }}
+
+
+    </ul> -->
+
+
+
+
+  <ul v-if="items && items.data && items.data.length">
+  {{items.data.length}}
+</ul>
+
+<ul v-else>
+  <li>{{items.length}}</li>
+</ul>
+
+
   </div>
 </template>
 
@@ -47,3 +60,17 @@ const fetchData = async () => {
 onMounted(fetchData)
 watch(() => props.apiUrl, fetchData)
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

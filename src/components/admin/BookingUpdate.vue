@@ -42,8 +42,8 @@ const route = useRoute()
 
 const toast = useToast()
 
-const apiUrl = 'https://event.unephmart.com/'
-
+// const apiUrl = 'https://event.unephmart.com/'
+// const api = 'https://event.unephmart.com/'
 
 onMounted(() => {
 
