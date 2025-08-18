@@ -70,59 +70,23 @@
         </ul>
 
 
-        <!-- Pagination Controls -->
+
 
 
 
 				</section>
 
-        <!-- <section class="text-center">
-          <div class="d-flex justify-content-center mt-4">
-            <button
-      :style="{ backgroundColor: 'rgb(78, 221, 232)', borderColor: 'rgb(78, 221, 232)', color: '#fff' }"
-      class="btn p-5"
-      :disabled="currentPage === 1"
-      @click="changePage(currentPage - 1)"
-    >
-      Previous
-    </button>
-    <span class="mx-2">Page {{ currentPage }} of {{ totalPages }}</span>
-      <button
-      :style="{ backgroundColor: 'rgb(78, 221, 232)', borderColor: 'rgb(78, 221, 232)', color: '#fff' }"
-      class="btn"
-      :disabled="currentPage === totalPages"
-      @click="changePage(currentPage + 1)"
-    >
-      Next
-    </button>
-
-    </div>
-        </section> -->
 
 
+     <!-- Loading -->
 
-        <!-- <button
-      v-if="currentIndex < events.length"
-      @click="loadMore"
-      class="btn btn-success px-5"
-    >
-      Load More
-    </button>
-
-    <p v-else class="text-gray-500">All events loaded</p> -->
-
-
-
-   <CustomButton
-      label="Load More"
-       sizeClass="medium"
-      customClass="contactButton"
-      :show="currentIndex < events.length && !loading"
-      @click="loadMore"
+      <LoadingComponent
+      :loading="loading"
+      :allLoaded="allLoaded"
+      text="events"
     />
 
-    <p v-if="loading" class="text-blue-500 mt-2">Loading...</p>
-    <p v-else-if="currentIndex >= events.length" class="text-gray-500 mt-2">All events loaded</p>
+
 
 
 				<!--===============================-->
@@ -143,11 +107,12 @@
 
 <script setup>
 import api from '@/api/axios';
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed ,onUnmounted } from 'vue';
 import { useToast } from 'vue-toast-notification';
 import { useRouter } from 'vue-router';
 import HeroSection from '@/components/frontend/HeroSection.vue';
-import CustomButton from '@/components/CustomButton.vue';
+import LoadingComponent from '@/components/LoadingComponent.vue';
+// import CustomButton from '@/components/CustomButton.vue';
 // import Button from '@/components/Button.vue';
 
 const apiUrl = 'https://event-api.appwebd.com/';
@@ -159,8 +124,10 @@ const router = useRouter();
 const events = ref([]);
 const visibleEvents = ref([]);
 const currentIndex = ref(0);
-const perPage = 4;
+const perPage = 2;
 const loading = ref(false);
+const allLoaded = ref(false);
+const firstLoad = ref(true);
 
 
 
@@ -206,14 +173,18 @@ function getTruncatedHtml(html, limit = 10) {
 
 
 
-// API থেকে ডেটা লোড করা
+
+
+
 const loadAllEvents = async () => {
   try {
     loading.value = true;
-    const res = await api.get("/events");
+    const res = await api.get("/events"); // backend API
     if (res.status === 200) {
       events.value = res.data.data;
-      loadMore(); // প্রথম ৬টা দেখাবে
+
+      loadMore();
+      firstLoad.value = false;
     }
   } catch (err) {
     console.log(err);
@@ -222,22 +193,60 @@ const loadAllEvents = async () => {
   }
 };
 
-// Load More
+
+
+
+// Load More with slow loading
 const loadMore = async () => {
-  loading.value = true; // লোডিং শুরু
-  await new Promise((resolve) => setTimeout(resolve, 500)); // simulate API delay
+  if (allLoaded.value) return;
+
+  loading.value = true;
+  // await new Promise(resolve => setTimeout(resolve, 3000)); // 1s delay for spinner
+
+  if (!firstLoad.value) {
+
+    await new Promise(resolve => setTimeout(resolve, 3000));
+  }
 
   const nextIndex = currentIndex.value + perPage;
   visibleEvents.value.push(...events.value.slice(currentIndex.value, nextIndex));
   currentIndex.value = nextIndex;
 
-  loading.value = false; // লোডিং শেষ
+  if (currentIndex.value >= events.value.length) {
+    allLoaded.value = true;
+  }
+
+  loading.value = false;
 };
+
+
+
+
+
+
+// Scroll handler
+const handleScroll = () => {
+  if (loading.value || allLoaded.value) return;
+
+  const scrollTop = window.scrollY || document.documentElement.scrollTop;
+  const windowHeight = window.innerHeight;
+  const fullHeight = document.documentElement.scrollHeight;
+
+  if (scrollTop + windowHeight >= fullHeight - 10) {
+    loadMore();
+  }
+};
+
+
 
 onMounted(() => {
   loadAllEvents();
+  window.addEventListener("scroll", handleScroll);
 });
 
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
 
 
 const formatDateTime = (date) => {
@@ -295,6 +304,8 @@ const handleBooking = (event) => {
 .custom-green {
   color: #28a745; /* This is a specific shade of green */
 }
+
+
 
 
 </style>
