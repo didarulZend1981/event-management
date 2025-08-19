@@ -12,7 +12,7 @@
                               </router-link>
 
                               <router-link class="nav-link" to="/admin-dashboard/member-event-bookings">
-                                  <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                  <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
                                   Event Booking
                               </router-link>
 
@@ -35,21 +35,21 @@
 
 
                               <router-link class="nav-link" to="/admin-dashboard/events/add">
-                                  <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                  <div class="sb-nav-link-icon"><i class="fas fa-plus"></i></div>
                                   ADD
                               </router-link>
 
                               <router-link class="nav-link" to="/admin-dashboard/events">
-                                  <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                  <div class="sb-nav-link-icon"><i class="fas fa-calendar"></i></div>
                                   events
                               </router-link>
 
                               <router-link class="nav-link" to="/admin-dashboard/member-event-bookings">
-                                  <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                  <div class="sb-nav-link-icon"><i class="fas fa-ticket-alt"></i></div>
                                   Event Booking
                               </router-link>
                               <router-link class="nav-link" to="/admin-dashboard/bookings">
-                                  <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                  <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
                                   All BooKing
                               </router-link>
 
@@ -66,13 +66,13 @@
                           <div class="small">Logged:</div>
 
 
-                  <span v-if="userRole == 'admin'"
-                    class="me-3 py-2 link-body-emphasis text-decoration-none">Admin dashboard
-                  </span>
+                              <span v-if="userRole == 'admin'"
+                                class="me-3 py-2 link-body-emphasis text-decoration-none">Admin dashboard
+                              </span>
 
-                <span v-if="userRole == 'user'"
-                    class="me-3 py-2 link-body-emphasis text-decoration-none" >Member dashboard
-                  </span>
+                            <span v-if="userRole == 'user'"
+                                class="me-3 py-2 link-body-emphasis text-decoration-none" >Member dashboard
+                              </span>
                       </div>
                   </nav>
               </div>

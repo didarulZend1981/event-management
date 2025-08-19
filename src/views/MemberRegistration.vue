@@ -131,20 +131,21 @@ const memberRegistration = async () => {
       },
     });
 
+   
+    if(response.status){
+        toast.success('registration has been completed', {
+          position:'top-right',
+          duration:2000
+        })
 
 
-    toast.success('registration has been completed', {
-      position:'top-right',
-      duration:2000
-    })
+        setTimeout(()=>{
+          router.push('/login').then(() => {
+            return window.location.reload();
+          })
+        }, 2000)
 
-
-    setTimeout(()=>{
-      router.push('/login').then(() => {
-        return window.location.reload();
-      })
-    }, 2000)
-
+  }
 
   }catch(error){
     toast.error('validation error', {

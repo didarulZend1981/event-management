@@ -20,7 +20,7 @@
                                     <li>Profile Image:
                                         <img
                                         v-if="loggeduser && loggeduser.profile_image"
-                                        :src="`${apiUrl}${loggeduser.profile_image}`"
+                                        :src="`${apiUrl}public/storage/${loggeduser.profile_image}`"
                                         alt=""/>
                                     </li>
                                 </ul>

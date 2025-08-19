@@ -42,14 +42,22 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12">
-                            <ul class="scoialinks">
-                                <li class="normal-txt">Find us on</li>
+                            <ul class="scoialinks social-links">
+                                <!-- <li class="normal-txt">Find us on</li>
                                 <li class="social-icons"><a class="facebook" href="#"></a></li>
                                 <li class="social-icons"><a class="twitter" href="#"></a></li>
                                 <li class="social-icons"><a class="linkedin" href="#"></a></li>
                                 <li class="social-icons"><a class="google-plus" href="#"></a></li>
-                                <li class="social-icons"><a class="wordpress" href="#"></a></li>
-                            </ul>
+                                <li class="social-icons"><a class="wordpress" href="#"></a></li> -->
+
+                             <li class="normal-txt">Find us on</li>
+  <li class="social-icons"><a class="facebook" href="#" data-icon="f"></a></li>
+  <li class="social-icons"><a class="twitter" href="#" data-icon="t"></a></li>
+  <li class="social-icons"><a class="linkedin" href="#" data-icon="in"></a></li>
+  <li class="social-icons"><a class="google-plus" href="#" data-icon="g+"></a></li>
+
+</ul>
+
                         </div>
                     </div>
                 </div>
@@ -86,11 +94,9 @@ export default {
 <style scoped>
  .block_title{
   margin-top: 150px;
-  border: 2px solid green;
- }
- .marginBottom{
 
  }
+
  button.btn.medium.contactButton {
   position: relative;
     margin-top: 75px;
@@ -135,6 +141,37 @@ button.btn.medium.contactButton::after {
     font-weight: 600;
     text-shadow: 1px 1px #000;
 }
+
+
+
+.social-icons a {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: darkslategrey;
+  position: relative;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  line-height: 36px; /* verticle centering */
+  font-size: 18px;
+}
+
+/* Generic content using data-attr */
+.social-icons a::before {
+  content: attr(data-icon);
+}
+
+/* Hover colors */
+.social-icons a.facebook:hover { background-color: #3b5998; }
+.social-icons a.twitter:hover { background-color: #1da1f2; }
+.social-icons a.linkedin:hover { background-color: #0077b5; }
+.social-icons a.google-plus:hover { background-color: #db4437; }
+.social-icons a.wordpress:hover { background-color: #21759b; }
 </style>
 
 

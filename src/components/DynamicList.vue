@@ -1,26 +1,21 @@
 <template>
   <div>
-    <h2>{{ title }}</h2>
-    <p v-if="loading">Loading...</p>
-    <!-- <ul v-else>
-
-      {{ items.data.length }}
-        {{ items.length }}
-
-
-    </ul> -->
+    <router-link class="nav-link" :to="link">
+            <h2>{{ title }}</h2>
+            <p v-if="loading">Loading...</p>
 
 
 
 
-  <ul v-if="items && items.data && items.data.length">
-  {{items.data.length}}
-</ul>
 
-<ul v-else>
-  <li>{{items.length}}</li>
-</ul>
+          <ul v-if="items && items.data && items.data.length">
+          {{items.data.length}}
+        </ul>
 
+        <ul v-else>
+          {{items.length}}
+        </ul>
+        </router-link>
 
   </div>
 </template>
@@ -36,6 +31,10 @@ const props = defineProps({
   title: {
     type: String,
     default: 'Items'
+  },
+  link: {
+    type: String,
+    default: '/' // fallback
   }
 })
 

@@ -1,32 +1,49 @@
 <template>
-
-  <ul v-if="loggeduser">
-      <li>Name: {{ loggeduser.name }}</li>
-      <li>Email: {{ loggeduser.email }}</li>
-      <li>Profile Image:
-          <img
+    <div class="container">
+    <ul v-if="loggeduser" class="card">
+      <li><strong>Name:</strong> {{ loggeduser.name }}</li>
+      <li><strong>Email:</strong> {{ loggeduser.email }}</li>
+      <li>
+        <strong>Profile Image:</strong>
+        <img
           v-if="loggeduser && loggeduser.profile_image"
-          :src="`${apiUrl}/pulic/${loggeduser.profile_image}`"
-          alt=""/>
+          :src="`${apiUrl}/pulic/storage/${loggeduser.profile_image}`"
+          alt="Profile"
+        />
       </li>
-  </ul>
-  <DynamicList
-    api-url="https://event-api.appwebd.com/api/events" title="Event"
+    </ul>
+
+
+  <DynamicList class="card"
+    api-url="https://event-api.appwebd.com/api/events"
+    title="Event"
+    link="/admin-dashboard/events"
+
 
 
   />
 
 
   <!-- http://localhost:8000/api/events -->
-  <DynamicList
-    api-url="https://event-api.appwebd.com/api/users" title="User"
+  <DynamicList class="card"
+    api-url="https://event-api.appwebd.com/api/users"
+    title="User"
+    link="/admin-dashboard"
 
   />
 
-  <DynamicList
-    api-url="https://event-api.appwebd.com/api/bookings" title="bookings"
 
-  />
+
+
+
+                <DynamicList class="card"
+                  api-url="https://event-api.appwebd.com/api/bookings"
+                  title="bookings"
+                  link="/admin-dashboard/member-event-bookings"
+
+                />
+
+   </div>
   </template>
 
   <script setup>
@@ -35,8 +52,7 @@ import DynamicList from '../DynamicList.vue';
           // import api from '@/api/axios';
 
           const loggeduser = ref(null)
-          //  const apiUrl = 'https://event.unephmart.com/'
-          // const apiUrl = 'http://localhost:5173/'
+
            const apiUrl = 'https://event-api.appwebd.com/api/'
           onMounted(async () => {
               // const test = 'users';
@@ -47,6 +63,55 @@ import DynamicList from '../DynamicList.vue';
           });
 
       </script>
+
+      <style scoped>
+/* Container */
+.container {
+  max-width: 960px;
+  margin: 50px auto;
+  display: flex;
+  gap: 30px;
+}
+
+.card{
+  padding: 20px;
+  text-align: center;
+}
+
+.card li{
+  list-style: none;
+}
+
+
+/* Responsive Rules */
+@media (max-width: 768px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .profile li {
+    font-size: 0.9rem;
+  }
+
+  .profile img {
+    max-width: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .profile {
+    text-align: center;
+  }
+
+  .profile img {
+    max-width: 70px;
+  }
+}
+</style>
 
 
 

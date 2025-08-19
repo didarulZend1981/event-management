@@ -60,7 +60,7 @@
 
 
 
-                  <li><button class="me-3 py-2 link-body-emphasis text-decoration-none btn btn-danger" @click="logout">Logout</button></li>
+                  <li><button class="me-3 py-2 link-body-emphasis text-decoration-none btn btn-danger logout-btn" @click="logout">Logout</button></li>
                 </template>
 
 
@@ -115,9 +115,33 @@ function goToMember() {
 
 <style scoped>
   #menu{
-    border: 2px solid red;
+    /* border: 2px solid red; */
     height:105px;
   }
+
+
+
+  .logout-btn {
+  padding: 8px 16px;
+  background-color: transparent;
+  border: none;
+  color: #333;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.2s ease;
+  text-transform: uppercase;
+  color: darkgoldenrod;
+}
+
+.logout-btn:hover {
+  color: #000;
+  transform: scale(1.05);
+}
+
+.logout-btn:focus {
+  outline: none;
+}
 </style>
 
 
