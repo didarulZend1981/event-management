@@ -22,7 +22,7 @@
 
 
   />
-
+  
 
   <!-- http://localhost:8000/api/events -->
   <DynamicList class="card"
